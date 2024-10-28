@@ -1,0 +1,1 @@
+default_app_config = 'aplicacion_trading.apps.AplicacionTradingConfig'

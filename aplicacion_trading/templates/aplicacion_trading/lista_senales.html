@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Señales de Hoy</title>
+</head>
+<body>
+    <h1>Señales para {{ senales.first.date }}</h1>
+    <table border="1">
+        <tr>
+            <th>Símbolo</th>
+            <th>Señal</th>
+        </tr>
+        {% for senal in senales %}
+        <tr>
+            <td>{{ senal.symbol }}</td>
+            <td>{{ senal.signal }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
