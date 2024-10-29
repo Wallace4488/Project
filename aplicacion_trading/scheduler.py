@@ -38,13 +38,20 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from django_apscheduler.jobstores import DjangoJobStore, register_events
 from django.core.management import call_command
 import logging
-from datetime import datetime
+import asyncio 
 
 logger = logging.getLogger(__name__)
 
 def ejecutar_estrategia():
     logger.info("Ejecutando estrategia...")
-    call_command('ejecutar_estrategia')
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
+    try:
+        call_command('ejecutar_estrategia')
+    finally:
+        loop.close()
+        logger.info("Estrategia ejecutada y bucle de eventos cerrado.")
 
 def start():
     scheduler = BackgroundScheduler()
@@ -53,7 +60,7 @@ def start():
     scheduler.add_job(
         ejecutar_estrategia,
         trigger='interval',
-        minutes=10,
+        minutes=2, 
         id='ejecutar_estrategia',
         replace_existing=True,
     )
