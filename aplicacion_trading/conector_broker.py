@@ -48,7 +48,6 @@ class ConectorBroker:
             asyncio.get_event_loop()
         except RuntimeError:
             asyncio.set_event_loop(asyncio.new_event_loop())
-
         from ib_insync import IB
 
         try:
@@ -57,3 +56,20 @@ class ConectorBroker:
             logger.info("Conectado a Interactive Brokers.")
         except Exception as e:
             logger.error(f"Error al conectar con Interactive Brokers: {e}")
+
+    def realizar_orden(self, symbol, accion, cantidad):
+        from ib_insync import Stock, MarketOrder
+
+        try:
+            contrato = Stock(symbol, 'SMART', 'USD')
+            orden = MarketOrder(accion, cantidad)
+            trade = self.ib.placeOrder(contrato, orden)
+            logger.info(f"Orden {accion} realizada para {symbol}")
+            return trade
+        except Exception as e:
+            logger.error(f"Error al realizar la orden para {symbol}: {e}")
+
+    def desconectar(self):
+        if self.ib:
+            self.ib.disconnect()
+            logger.info("Desconectado de Interactive Brokers.")
